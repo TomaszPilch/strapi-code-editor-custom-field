@@ -60,3 +60,7 @@ Remove language from value:
 const languageRegExp = new RegExp('__(.+)__;')
 const valueWithoutLanguage = value.replace(languageRegExp, '')
 ```
+
+## Issues
+
+If you find any issues, please report them [here](https://github.com/TomaszPilch/strapi-code-editor-custom-field/issues).
