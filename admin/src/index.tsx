@@ -1,4 +1,4 @@
-import React from 'react'
+// @ts-ignore
 import { Code } from '@strapi/icons'
 
 import pluginPkg from '../../package.json'
@@ -8,7 +8,7 @@ import Initializer from './components/Initializer'
 const name = pluginPkg.strapi.name
 
 export default {
-  register(app) {
+  register(app: any) {
     app.customFields.register({
       name: 'code-editor-json',
       pluginId,
