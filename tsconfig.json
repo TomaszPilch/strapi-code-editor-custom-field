@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": ".",
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true,
+    "jsx": "react",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "pretty": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "ES2020",
+    "types": ["node"]
+  },
+  "include": [
+    // Include the root directory
+    "server",
+    // Force the JSON files in the src folder to be included
+    "server/**/*.json"
+  ],
+
+  "exclude": [
+    "node_modules/",
+    "dist/",
+
+    // Do not include admin files in the server compilation
+    "admin/",
+    // Do not include test files
+    "**/*.test.ts"
+  ]
+}

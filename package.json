@@ -1,0 +1,64 @@
+{
+  "name": "strapi-code-editor-custom-field",
+  "version": "0.1.0",
+  "description": "Code editor plugin for strapi CMS. It uses the monaco editor (vscode).",
+  "strapi": {
+    "name": "strapi-code-editor-custom-field",
+    "description": "Code editor plugin for strapi CMS. It uses the monaco editor (vscode).",
+    "kind": "plugin",
+    "displayName": "Code editor plugin"
+  },
+  "keywords": [
+    "strapi",
+    "@strapi",
+    "strapi plugin",
+    "strapi custom field",
+    "strapi code editor",
+    "strapi monaco editor",
+    "strapi vscode editor"
+  ],
+  "dependencies": {
+    "@monaco-editor/react": "^4.4.6",
+    "@strapi/design-system": "^1.4.1",
+    "@strapi/icons": "^1.3.1",
+    "@strapi/strapi": "^4.5.4",
+    "rxjs": "^7.8.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.26",
+    "@types/styled-components": "^5.1.26",
+    "prettier": "^2.8.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-intl": "^6.2.5",
+    "typescript": "4.6.3"
+  },
+  "author": {
+    "name": "Tomasz Pilch",
+    "email": "tpilcht@gmail.com",
+    "url": "https://github.com/TomaszPilch"
+  },
+  "files": [
+    "lib/*",
+    "package.json",
+    "README.md",
+    "yarn.lock",
+    "LICENSE",
+    "strapi-admin.js",
+    "strapi-server.js",
+    "images"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TomaszPilch/strapi-code-editor-custom-field.git"
+  },
+  "engines": {
+    "node": ">=14.19.1 <=18.x.x",
+    "npm": ">=6.0.0"
+  },
+  "scripts": {
+    "develop": "tsc -w",
+    "build": "tsc"
+  },
+  "license": "MIT"
+}
