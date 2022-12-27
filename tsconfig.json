@@ -21,7 +21,8 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "target": "ES2020"
+    "target": "ES2020",
+    "typeRoots": ["node_modules/@types", "admin/src/types/global.d.ts"],
   },
   "include": [
     "admin/**/*.ts",

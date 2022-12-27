@@ -2,16 +2,14 @@ import React, { Suspense, useState, useEffect } from 'react'
 import { useIntl } from 'react-intl'
 import { debounceTime, Subject } from 'rxjs'
 import styled from 'styled-components'
+import CodeEditorLib from '@monaco-editor/react'
 
-// @ts-ignore
 import { Field, FieldHint, FieldError, FieldLabel } from '@strapi/design-system/Field'
-// @ts-ignore
-import { Stack, Flex, Loader, Select, Option, IconButton, Icon, Box } from '@strapi/design-system'
-// @ts-ignore
+import { Stack, Flex, Loader, Select, Option, IconButton, Icon } from '@strapi/design-system'
 import { Expand } from '@strapi/icons'
 import { MessageFormatElement } from '@formatjs/icu-messageformat-parser'
 
-const CodeEditorLib = React.lazy(() => import('@monaco-editor/react')) as React.ComponentType<any>
+import initWorkers from '../../utils/workers'
 
 const languages = [
   'css',
@@ -70,6 +68,8 @@ type CodeEditorPropsT = {
   value: null | string
 }
 
+initWorkers()
+
 const CodeEditor = ({
   attribute,
   description,
@@ -93,7 +93,7 @@ const CodeEditor = ({
     languageFromValue = null
   }
   const [language, setLanguage] = useState(languageFromValue || defaultLanguage)
-  const [editorValue, setEditorValue] = useState(value ? value.replace(languageRegExp, '') : value)
+  const [editorValue, setEditorValue] = useState<string>(value ? value.replace(languageRegExp, '') : '')
   const [subject] = useState(new Subject<string>())
   const [fullScreen, setFullScreen] = useState(false)
 
@@ -111,9 +111,10 @@ const CodeEditor = ({
     }
   }, [])
 
-  const handleChange = (value: string) => {
-    setEditorValue(value)
-    subject.next(isJson ? value : `__${language}__;${value}`)
+  const handleChange = (value?: string) => {
+    const valueToSet = value || ''
+    setEditorValue(valueToSet)
+    subject.next(isJson ? valueToSet : `__${language}__;${valueToSet}`)
   }
 
   const StyledDiv = fullScreen ? FullScreenDiv : NormalDiv
