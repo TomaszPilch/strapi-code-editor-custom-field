@@ -60,6 +60,16 @@ module.exports = (config) => {
 
 ```
 
+Last step is to rebuild the admin panel.
+
+```
+npm run build
+
+OR
+
+yarn build
+```
+
 ## Usage
 
 When you add the plugin you will see two new custom fields. One for javascript (and other languages) and one for json.
