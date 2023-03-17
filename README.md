@@ -76,24 +76,29 @@ When you add the plugin you will see two new custom fields. One for javascript (
 
 ![Two custom fields](images/img.png)
 
-The editor then will show up in content-type add/edit page.
+The editor then will show up in content-type add/edit page. It can be opened in fullscreen mode.
 
-JSON editor
+### JSON editor
 
 ![JSON editor](images/img2.png)
 
-Javascript editor
+### Javascript editor
 
 ![Javascript editor](images/img3.png)
 
-Editor can be opened in fullscreen mode.
+You can select the language in content-type builder options (if you select it, you can not change it in the editor instance).
+
+![Select language options](images/img4.png)
+
 
 ## Under the hood
 
 Editor is using two different types for strapi field. When you select JSON editor it will be `json` type.
-When you select different language it will be `text` type.
+When you select different language, it will be `text` type.
 
-In case of other language than json, the language is prefixed before value.
+For `text` type you can select the language. If you select it, the select will not show up in the editor.
+
+In case you don't select the language, you can pick it dynamically, but the language is prefixed before the value.
 
 Language selector:
 

@@ -57,6 +57,9 @@ interface MessageDescriptor {
 type CodeEditorPropsT = {
   attribute: {
     customField: string
+    options?: {
+      language?: string
+    }
   }
   description: MessageDescriptor
   error?: string
@@ -85,6 +88,7 @@ const CodeEditor = ({
   const { formatMessage } = useIntl()
   const languageRegExp = new RegExp('__(.+)__;')
   const isJson = attribute.customField.endsWith('code-editor-json')
+  const languageFromOptions = attribute?.options?.language
   const defaultLanguage = isJson ? 'json' : 'javascript'
   let languageFromValue: null | Array<string> | string = value ? value.match(languageRegExp) : null
   if (languageFromValue && languageFromValue.length > 1) {
@@ -92,7 +96,8 @@ const CodeEditor = ({
   } else {
     languageFromValue = null
   }
-  const [language, setLanguage] = useState(languageFromValue || defaultLanguage)
+
+  const [language, setLanguage] = useState(languageFromOptions || languageFromValue || defaultLanguage)
   const [editorValue, setEditorValue] = useState<string>(value ? value.replace(languageRegExp, '') : '')
   const [subject] = useState(new Subject<string>())
   const [fullScreen, setFullScreen] = useState(false)
@@ -114,7 +119,7 @@ const CodeEditor = ({
   const handleChange = (value?: string) => {
     const valueToSet = value || ''
     setEditorValue(valueToSet)
-    subject.next(isJson ? valueToSet : `__${language}__;${valueToSet}`)
+    subject.next(isJson || languageFromOptions ? valueToSet : `__${language}__;${valueToSet}`)
   }
 
   const StyledDiv = fullScreen ? FullScreenDiv : NormalDiv
@@ -133,7 +138,7 @@ const CodeEditor = ({
                   label="expand"
                   icon={<Icon width={'10rem'} height={`10rem`} as={Expand} />}
                 />
-                {!isJson && (
+                {!isJson && !languageFromOptions && (
                   <Select id={`${name}-language-select`} label="" value={language} onChange={setLanguage}>
                     {languages.map((lang) => (
                       <Option key={lang} value={lang}>
