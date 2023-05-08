@@ -25,6 +25,19 @@ export default {
       components: {
         Input: async () => import(/* webpackChunkName: "input-component" */ './components/CodeEditor/CodeEditor'),
       },
+      options: {
+        advanced: [
+          {
+            intlLabel: {
+              id: 'code-editor-text.sectionAdvanced.defaultValue',
+              defaultMessage: 'Default value',
+            },
+            name: 'options.defaultValue',
+            type: 'textarea',
+            value: '',
+          },
+        ],
+      },
     })
     app.customFields.register({
       name: 'code-editor-text',
@@ -219,6 +232,17 @@ export default {
                 ],
               },
             ],
+          },
+        ],
+        advanced: [
+          {
+            intlLabel: {
+              id: 'code-editor-text.sectionAdvanced.defaultValue',
+              defaultMessage: 'Default value',
+            },
+            name: 'options.defaultValue',
+            type: 'textarea',
+            value: '',
           },
         ],
       },

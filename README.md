@@ -1,3 +1,5 @@
+![strapi-code-editor.png](images/strapi-code-editor.png)
+
 # Strapi plugin strapi-code-editor-custom-field
 
 Code editor plugin for strapi CMS. It uses the monaco editor (vscode).
@@ -118,3 +120,45 @@ const valueWithoutLanguage = value.replace(languageRegExp, '')
 
 If you find any issues, please report
 them [here](https://github.com/TomaszPilch/strapi-code-editor-custom-field/issues).
+
+## Development
+
+If you want to contribute to this plugin, you can follow this steps:
+
+1. Clone this repository
+2. Install dependencies
+
+```
+yarn install
+```
+
+3. Link the plugin
+
+```
+yarn link
+```
+
+4. Link the plugin to your strapi project
+
+```
+cd /your-strapi-project
+yarn link strapi-code-editor-custom-field
+```
+
+5. Build the plugin
+
+```
+yarn build
+```
+
+6. Run watch mode
+
+```
+yarn watch
+```
+
+7. Start the strapi project
+
+## Contributing
+
+Feel free to fork and make a Pull Request to this plugin project. All the input is warmly welcome! ❤️

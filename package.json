@@ -18,24 +18,24 @@
     "strapi vscode editor"
   ],
   "peerDependencies": {
-    "@strapi/strapi": "^4.8"
+    "@strapi/strapi": "^4.10"
   },
   "dependencies": {
-    "@monaco-editor/react": "^4.4.6",
-    "@strapi/design-system": "^1.6.6",
-    "@strapi/icons": "^1.6.6",
-    "monaco-editor": "^0.36.1",
-    "rxjs": "^7.8.0"
+    "@monaco-editor/react": "^4.5.1",
+    "@strapi/design-system": "^1.7.3",
+    "@strapi/icons": "^1.7.3",
+    "monaco-editor": "^0.38.0",
+    "rxjs": "^7.8.1"
   },
   "devDependencies": {
-    "@strapi/strapi": "^4.8.2",
-    "@types/react": "^18.0.28",
+    "@strapi/strapi": "^4.10.2",
+    "@types/react": "^18.2.6",
     "@types/styled-components": "^5.1.26",
-    "prettier": "^2.8.4",
+    "prettier": "^2.8.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-intl": "^6.3.0",
-    "typescript": "5.0.2"
+    "react-intl": "^6.4.2",
+    "typescript": "5.0.4"
   },
   "author": {
     "name": "Tomasz Pilch",
@@ -62,7 +62,8 @@
   },
   "scripts": {
     "develop": "tsc -w",
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json",
+    "watch": "tsc -p tsconfig.json --watch"
   },
   "license": "MIT"
 }

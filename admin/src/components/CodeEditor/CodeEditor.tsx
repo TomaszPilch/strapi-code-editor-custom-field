@@ -59,6 +59,7 @@ type CodeEditorPropsT = {
     customField: string
     options?: {
       language?: string
+      defaultValue?: string
     }
   }
   description: MessageDescriptor
@@ -96,6 +97,7 @@ const CodeEditor = ({
   } else {
     languageFromValue = null
   }
+  const defaultValue = attribute?.options?.defaultValue || undefined
 
   const [language, setLanguage] = useState(languageFromOptions || languageFromValue || defaultLanguage)
   const [editorValue, setEditorValue] = useState<string>(value ? value.replace(languageRegExp, '') : '')
@@ -152,6 +154,7 @@ const CodeEditor = ({
           </Flex>
           <Suspense fallback={<Loader>Loading</Loader>}>
             <CodeEditorLib
+              defaultValue={defaultValue}
               height={fullScreen ? '80vh' : '30vh'}
               language={language}
               loading={<Loader>Loading</Loader>}
