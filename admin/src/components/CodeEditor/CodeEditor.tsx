@@ -25,6 +25,7 @@ const languages = [
   'plaintext',
   'powerquery',
   'powershell',
+  'python',
   'scss',
   'shell',
   'sql',
