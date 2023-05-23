@@ -185,6 +185,16 @@ export default {
                     },
                   },
                   {
+                    key: 'python',
+                    value: 'python',
+                    metadatas: {
+                      intlLabel: {
+                        id: 'code-editor-text.sectionBase.languageValue.python',
+                        defaultMessage: 'python',
+                      },
+                    },
+                  },
+                  {
                     key: 'scss',
                     value: 'scss',
                     metadatas: {
