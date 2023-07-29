@@ -99,21 +99,37 @@ const CodeEditor = ({
     languageFromValue = null
   }
   const defaultValue = attribute?.options?.defaultValue || undefined
-
+  let defaultValueForEditor = value ? value.replace(languageRegExp, '') : ''
+  if (
+    (!defaultValueForEditor && defaultValue) ||
+    (isJson && typeof value === 'object' && value && Object.keys(value).length === 0 && defaultValue)
+  ) {
+    defaultValueForEditor = defaultValue
+  }
   const [language, setLanguage] = useState(languageFromOptions || languageFromValue || defaultLanguage)
-  const [editorValue, setEditorValue] = useState<string>(value ? value.replace(languageRegExp, '') : '')
+  const [editorValue, setEditorValue] = useState<string>(defaultValueForEditor)
   const [subject] = useState(new Subject<string>())
   const [fullScreen, setFullScreen] = useState(false)
+  const [prevValue, setPrevValue] = useState(value)
+
+  if (prevValue !== value) {
+    setPrevValue(value)
+    setEditorValue(value ? value.replace(languageRegExp, '') : '')
+  }
 
   // @ts-ignore
   const theme = localStorage.getItem('STRAPI_THEME')
 
   const handleOnChange = (value: string) => {
     onChange({ target: { name, value } })
+    setPrevValue(value)
   }
 
   useEffect(() => {
     const subscription = subject.pipe(debounceTime(1000)).subscribe(handleOnChange)
+    if (defaultValueForEditor) {
+      handleChange(defaultValueForEditor)
+    }
     return () => {
       subscription.unsubscribe()
     }
