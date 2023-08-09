@@ -162,3 +162,5 @@ yarn watch
 ## Contributing
 
 Feel free to fork and make a Pull Request to this plugin project. All the input is warmly welcome! ❤️
+
+More info about [contributing](https://github.com/TomaszPilch/strapi-code-editor-custom-field/blob/main/CONTRIBUTING.md).
