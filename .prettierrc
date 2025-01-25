@@ -1,4 +1,6 @@
 {
+  "endOfLine": "lf",
+  "tabWidth": 2,
   "arrowParens": "always",
   "bracketSpacing": true,
   "singleQuote": true,

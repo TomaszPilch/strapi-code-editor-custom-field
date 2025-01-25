@@ -4,6 +4,12 @@
 
 Code editor plugin for strapi CMS. It uses the monaco editor (vscode).
 
+## Compatibility
+
+This plugin is compatible with **Strapi v5 from 1.0.0 version**.
+
+If you are using Strapi v4, please use the 0.6.0 version.
+
 ## Installation
 
 You need install also monaco editor.

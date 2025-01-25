@@ -2,10 +2,9 @@ import React, { Suspense, useState, useEffect } from 'react'
 import { useIntl } from 'react-intl'
 import { debounceTime, Subject } from 'rxjs'
 import styled from 'styled-components'
-import CodeEditorLib from '@monaco-editor/react'
+import CodeEditorLib, { EditorProps } from '@monaco-editor/react'
 
-import { Field, FieldHint, FieldError, FieldLabel } from '@strapi/design-system/Field'
-import { Stack, Flex, Loader, Select, Option, IconButton, Icon } from '@strapi/design-system'
+import { Flex, Loader, SingleSelect, SingleSelectOption, IconButton, Field } from '@strapi/design-system'
 import { Expand } from '@strapi/icons'
 import { MessageFormatElement } from '@formatjs/icu-messageformat-parser'
 
@@ -142,35 +141,32 @@ const CodeEditor = ({
   }
 
   const StyledDiv = fullScreen ? FullScreenDiv : NormalDiv
+  const Editor = CodeEditorLib as unknown as React.FC<EditorProps>
   return (
     <Field name={name} id={name} error={error} hint={description && formatMessage(description)} required={required}>
       <StyledDiv>
-        <Stack spacing={3}>
+        <Flex spacing={3}>
           <Flex>
             <Flex width="30%" justifyContent="flex-start">
-              <FieldLabel action={labelAction}>{formatMessage(intlLabel)}</FieldLabel>
+              <Field.Label action={labelAction}>{formatMessage(intlLabel)}</Field.Label>
             </Flex>
             <Flex width="70%" justifyContent="flex-end">
-              <Stack spacing={2} horizontal>
-                <IconButton
-                  onClick={() => setFullScreen((prev) => !prev)}
-                  label="expand"
-                  icon={<Icon width={'10rem'} height={`10rem`} as={Expand} />}
-                />
+              <Flex spacing={2} direction="column">
+                <IconButton onClick={() => setFullScreen((prev) => !prev)} label="expand" icon={<Expand />} />
                 {!isJson && !languageFromOptions && (
-                  <Select id={`${name}-language-select`} label="" value={language} onChange={setLanguage}>
+                  <SingleSelect id={`${name}-language-select`} label="" value={language} onChange={setLanguage}>
                     {languages.map((lang) => (
-                      <Option key={lang} value={lang}>
+                      <SingleSelectOption key={lang} value={lang}>
                         {lang}
-                      </Option>
+                      </SingleSelectOption>
                     ))}
-                  </Select>
+                  </SingleSelect>
                 )}
-              </Stack>
+              </Flex>
             </Flex>
           </Flex>
           <Suspense fallback={<Loader>Loading</Loader>}>
-            <CodeEditorLib
+            <Editor
               defaultValue={defaultValue}
               height={fullScreen ? '80vh' : '30vh'}
               language={language}
@@ -180,9 +176,9 @@ const CodeEditor = ({
               value={editorValue}
             />
           </Suspense>
-          <FieldHint />
-          <FieldError />
-        </Stack>
+          <Field.Hint />
+          <Field.Error />
+        </Flex>
       </StyledDiv>
     </Field>
   )

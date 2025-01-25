@@ -1,17 +1,13 @@
-// @ts-ignore
 import { Code } from '@strapi/icons'
 
-import pluginPkg from '../../package.json'
-import pluginId from './pluginId'
-import Initializer from './components/Initializer'
-
-const name = pluginPkg.strapi.name
+import { PLUGIN_ID } from './pluginId'
+import { Initializer } from './components/Initializer'
 
 export default {
   register(app: any) {
     app.customFields.register({
       name: 'code-editor-json',
-      pluginId,
+      pluginId: PLUGIN_ID,
       type: 'json',
       intlLabel: {
         id: 'code-editor-json.label',
@@ -41,7 +37,7 @@ export default {
     })
     app.customFields.register({
       name: 'code-editor-text',
-      pluginId,
+      pluginId: PLUGIN_ID,
       type: 'text',
       intlLabel: {
         id: 'code-editor-text.label',
@@ -258,14 +254,12 @@ export default {
       },
     })
 
-    const plugin = {
-      id: pluginId,
+    app.registerPlugin({
+      id: PLUGIN_ID,
       initializer: Initializer,
       isReady: false,
-      name,
-    }
-
-    app.registerPlugin(plugin)
+      name: PLUGIN_ID,
+    })
   },
 
   bootstrap() {},
