@@ -1,4 +1,4 @@
-import React, { Suspense, useState, useEffect } from 'react'
+import React, { Suspense, useState, useEffect, useRef } from 'react'
 import { debounceTime, Subject } from 'rxjs'
 import styled from 'styled-components'
 import CodeEditorLib, { EditorProps } from '@monaco-editor/react'
@@ -39,7 +39,7 @@ const FullScreenDiv = styled.div`
   height: 100%;
   z-index: 999;
   padding: 45px;
-  background: ${({ theme }) => theme.colors.neutral100};
+  background: #181826;
 `
 
 const NormalDiv = styled.div`
@@ -55,7 +55,7 @@ type CodeEditorPropsT = {
       defaultValue?: string
     }
   }
-  description: string
+  hint: string
   error?: string
   label: string
   labelAction?: React.ReactNode
@@ -69,7 +69,7 @@ initWorkers()
 
 const CodeEditor = ({
   attribute,
-  description,
+  hint,
   // disabled, - todo readonly
   error,
   label,
@@ -105,10 +105,10 @@ const CodeEditor = ({
   const [editorValue, setEditorValue] = useState<string>(defaultValueForEditor)
   const [subject] = useState(new Subject<string>())
   const [fullScreen, setFullScreen] = useState(false)
-  const [prevValue, setPrevValue] = useState(value)
+  const prevValue = useRef(value)
 
-  if (prevValue !== value) {
-    setPrevValue(value)
+  if (prevValue.current !== value) {
+    prevValue.current = value
     setEditorValue(hasValue && value ? value.replace(languageRegExp, '') : '')
   }
 
@@ -117,7 +117,7 @@ const CodeEditor = ({
 
   const handleOnChange = (value: string) => {
     onChange({ target: { name, type: attribute.type, value } })
-    setPrevValue(value)
+    prevValue.current = value
   }
 
   useEffect(() => {
@@ -139,9 +139,9 @@ const CodeEditor = ({
   const StyledDiv = fullScreen ? FullScreenDiv : NormalDiv
   const Editor = CodeEditorLib as unknown as React.FC<EditorProps>
   return (
-    <Field.Root name={name} id={name} error={error} hint={description} required={required}>
+    <Field.Root name={name} id={name} error={error} hint={hint} required={required}>
       <StyledDiv>
-        <Flex gap={3} direction="column">
+        <Flex gap={3} direction="column" alignItems="flex-start">
           <Flex width="100%">
             <Flex width="30%" justifyContent="flex-start">
               <Field.Label action={labelAction}>{label}</Field.Label>
@@ -163,6 +163,7 @@ const CodeEditor = ({
               </Flex>
             </Flex>
           </Flex>
+          <Field.Hint />
           <Suspense fallback={<Loader>Loading</Loader>}>
             <Editor
               defaultValue={defaultValue}
@@ -174,7 +175,6 @@ const CodeEditor = ({
               value={editorValue}
             />
           </Suspense>
-          <Field.Hint />
           <Field.Error />
         </Flex>
       </StyledDiv>
