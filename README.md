@@ -15,11 +15,21 @@ If you are using Strapi v4, please use the 0.6.0 version.
 You need install also monaco editor.
 
 ```
-yarn add monaco-editor monaco-editor-webpack-plugin strapi-code-editor-custom-field
+yarn add monaco-editor strapi-code-editor-custom-field
 ```
 
 ```
-npm install monaco-editor monaco-editor-webpack-plugin strapi-code-editor-custom-field
+npm install monaco-editor strapi-code-editor-custom-field
+```
+
+Strapi 5 is now using vite for building the admin panel, so you need to install the vite plugin. 
+
+```
+yarn add vite-plugin-monaco-editor -D
+```
+
+```
+npm install --save-dev vite-plugin-monaco-editor
 ```
 
 You must add plugin to `config/plugins.js` file.
@@ -53,7 +63,44 @@ You need to update the `config/middlewares.ts` file. Replace `strapi::security` 
 
 This will add the `cdn.jsdelivr.net` to the `script-src-elem` directive for enabling content security policy.
 
-And the last step is to add the `monaco-editor-webpack-plugin` to the `src/admin/webpack.config.js` file.
+The the last step is to create/update the vite config file.
+
+`/src/admin/vite.config.ts`
+
+```
+import { mergeConfig } from 'vite'
+import monacoEditorPlugin from 'vite-plugin-monaco-editor'
+
+export default (config) => {
+  // Important: always return the modified config
+  return mergeConfig(config, {
+    plugins: [monacoEditorPlugin({})],
+  })
+}
+```
+
+Now rebuild the admin panel.
+
+```
+npm run build
+
+OR
+
+yarn build
+```
+
+### The "old" way with webpack (Strapi 4)
+
+Add the `monaco-editor-webpack-plugin` to the `src/admin/webpack.config.js` file.
+
+```
+yarn add monaco-editor-webpack-plugin
+```
+
+```
+npm install monaco-editor-webpack-plugin
+```
+
 
 ```
 'use strict'
@@ -66,16 +113,6 @@ module.exports = (config) => {
   return config
 }
 
-```
-
-Now rebuild the admin panel.
-
-```
-npm run build
-
-OR
-
-yarn build
 ```
 
 ## Usage
@@ -138,32 +175,19 @@ If you want to contribute to this plugin, you can follow this steps:
 yarn install
 ```
 
-3. Link the plugin
+3. Link the plugin with yalc
 
 ```
-yarn link
+yarn watch:link
 ```
 
-4. Link the plugin to your strapi project
+4. Link the plugin to your strapi project (in the strapi project)
 
 ```
-cd /your-strapi-project
-yarn link strapi-code-editor-custom-field
+yalc add --link strapi-code-editor-custom-field && yarn install
 ```
 
-5. Build the plugin
-
-```
-yarn build
-```
-
-6. Run watch mode
-
-```
-yarn watch
-```
-
-7. Start the strapi project
+5. Start the strapi project
 
 ## Contributing
 
