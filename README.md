@@ -43,7 +43,7 @@ You need to update the `config/middlewares.ts` file. Replace `strapi::security` 
     contentSecurityPolicy: {
       useDefaults: true,
       directives: {
-        'script-src-elem': ["'self'", 'cdn.jsdelivr.net'],
+        'script-src-elem': ["'self'", "'unsafe-inline'", 'cdn.jsdelivr.net'],
         upgradeInsecureRequests: null,
       },
     },
@@ -68,7 +68,7 @@ module.exports = (config) => {
 
 ```
 
-Last step is to rebuild the admin panel.
+Now rebuild the admin panel.
 
 ```
 npm run build
