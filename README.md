@@ -4,6 +4,12 @@
 
 Code editor plugin for strapi CMS. It uses the monaco editor (vscode).
 
+## Compatibility
+
+This plugin is compatible with **Strapi v5 from 1.0.0 version**.
+
+If you are using Strapi v4, please use the 0.6.0 version.
+
 ## Installation
 
 You need install also monaco editor.
@@ -37,7 +43,7 @@ You need to update the `config/middlewares.ts` file. Replace `strapi::security` 
     contentSecurityPolicy: {
       useDefaults: true,
       directives: {
-        'script-src-elem': ["'self'", 'cdn.jsdelivr.net'],
+        'script-src-elem': ["'self'", "'unsafe-inline'", 'cdn.jsdelivr.net'],
         upgradeInsecureRequests: null,
       },
     },
@@ -62,7 +68,7 @@ module.exports = (config) => {
 
 ```
 
-Last step is to rebuild the admin panel.
+Now rebuild the admin panel.
 
 ```
 npm run build

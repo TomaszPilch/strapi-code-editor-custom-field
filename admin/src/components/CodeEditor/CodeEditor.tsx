@@ -1,13 +1,10 @@
-import React, { Suspense, useState, useEffect } from 'react'
-import { useIntl } from 'react-intl'
+import React, { Suspense, useState, useEffect, useRef } from 'react'
 import { debounceTime, Subject } from 'rxjs'
 import styled from 'styled-components'
-import CodeEditorLib from '@monaco-editor/react'
+import CodeEditorLib, { EditorProps } from '@monaco-editor/react'
 
-import { Field, FieldHint, FieldError, FieldLabel } from '@strapi/design-system/Field'
-import { Stack, Flex, Loader, Select, Option, IconButton, Icon } from '@strapi/design-system'
+import { Flex, Loader, SingleSelect, SingleSelectOption, IconButton, Field } from '@strapi/design-system'
 import { Expand } from '@strapi/icons'
-import { MessageFormatElement } from '@formatjs/icu-messageformat-parser'
 
 import initWorkers from '../../utils/workers'
 
@@ -42,33 +39,28 @@ const FullScreenDiv = styled.div`
   height: 100%;
   z-index: 999;
   padding: 45px;
-  background: ${({ theme }) => theme.colors.neutral100};
+  background: #181826;
 `
 
 const NormalDiv = styled.div`
   min-height: 35vh;
 `
 
-interface MessageDescriptor {
-  id?: string
-  description?: string | object
-  defaultMessage?: string | MessageFormatElement[]
-}
-
 type CodeEditorPropsT = {
   attribute: {
+    type: string
     customField: string
     options?: {
       language?: string
       defaultValue?: string
     }
   }
-  description: MessageDescriptor
+  hint: string
   error?: string
-  intlLabel: MessageDescriptor
+  label: string
   labelAction?: React.ReactNode
   name: string
-  onChange: (ev: { target: { name: string; value: string } }) => void
+  onChange: (ev: { target: { name: string; type: string; value: any } }) => void
   required: boolean
   value: null | string
 }
@@ -77,29 +69,32 @@ initWorkers()
 
 const CodeEditor = ({
   attribute,
-  description,
+  hint,
   // disabled, - todo readonly
   error,
-  intlLabel,
+  label,
   labelAction,
   name,
   onChange,
   required,
   value,
 }: CodeEditorPropsT) => {
-  const { formatMessage } = useIntl()
   const languageRegExp = new RegExp('__(.+)__;')
   const isJson = attribute.customField.endsWith('code-editor-json')
   const languageFromOptions = attribute?.options?.language
   const defaultLanguage = isJson ? 'json' : 'javascript'
-  let languageFromValue: null | Array<string> | string = value ? value.match(languageRegExp) : null
+  if (isJson && value && typeof value === 'object') {
+    value = JSON.stringify(value, null, 2)
+  }
+  const hasValue = typeof value === 'string'
+  let languageFromValue: null | Array<string> | string = hasValue && value ? value.match(languageRegExp) : null
   if (languageFromValue && languageFromValue.length > 1) {
     languageFromValue = languageFromValue[1] as string
   } else {
     languageFromValue = null
   }
   const defaultValue = attribute?.options?.defaultValue || undefined
-  let defaultValueForEditor = value ? value.replace(languageRegExp, '') : ''
+  let defaultValueForEditor = hasValue && value ? value.replace(languageRegExp, '') : ''
   if (
     (!defaultValueForEditor && defaultValue) ||
     (isJson && typeof value === 'object' && value && Object.keys(value).length === 0 && defaultValue)
@@ -110,19 +105,19 @@ const CodeEditor = ({
   const [editorValue, setEditorValue] = useState<string>(defaultValueForEditor)
   const [subject] = useState(new Subject<string>())
   const [fullScreen, setFullScreen] = useState(false)
-  const [prevValue, setPrevValue] = useState(value)
+  const prevValue = useRef(value)
 
-  if (prevValue !== value) {
-    setPrevValue(value)
-    setEditorValue(value ? value.replace(languageRegExp, '') : '')
+  if (prevValue.current !== value) {
+    prevValue.current = value
+    setEditorValue(hasValue && value ? value.replace(languageRegExp, '') : '')
   }
 
   // @ts-ignore
   const theme = localStorage.getItem('STRAPI_THEME')
 
   const handleOnChange = (value: string) => {
-    onChange({ target: { name, value } })
-    setPrevValue(value)
+    onChange({ target: { name, type: attribute.type, value } })
+    prevValue.current = value
   }
 
   useEffect(() => {
@@ -142,35 +137,35 @@ const CodeEditor = ({
   }
 
   const StyledDiv = fullScreen ? FullScreenDiv : NormalDiv
+  const Editor = CodeEditorLib as unknown as React.FC<EditorProps>
   return (
-    <Field name={name} id={name} error={error} hint={description && formatMessage(description)} required={required}>
+    <Field.Root name={name} id={name} error={error} hint={hint} required={required}>
       <StyledDiv>
-        <Stack spacing={3}>
-          <Flex>
+        <Flex gap={3} direction="column" alignItems="flex-start">
+          <Flex width="100%">
             <Flex width="30%" justifyContent="flex-start">
-              <FieldLabel action={labelAction}>{formatMessage(intlLabel)}</FieldLabel>
+              <Field.Label action={labelAction}>{label}</Field.Label>
             </Flex>
             <Flex width="70%" justifyContent="flex-end">
-              <Stack spacing={2} horizontal>
-                <IconButton
-                  onClick={() => setFullScreen((prev) => !prev)}
-                  label="expand"
-                  icon={<Icon width={'10rem'} height={`10rem`} as={Expand} />}
-                />
+              <Flex gap={2}>
+                <IconButton onClick={() => setFullScreen((prev) => !prev)} label="expand">
+                  <Expand />
+                </IconButton>
                 {!isJson && !languageFromOptions && (
-                  <Select id={`${name}-language-select`} label="" value={language} onChange={setLanguage}>
+                  <SingleSelect id={`${name}-language-select`} label="" value={language} onChange={setLanguage}>
                     {languages.map((lang) => (
-                      <Option key={lang} value={lang}>
+                      <SingleSelectOption key={lang} value={lang}>
                         {lang}
-                      </Option>
+                      </SingleSelectOption>
                     ))}
-                  </Select>
+                  </SingleSelect>
                 )}
-              </Stack>
+              </Flex>
             </Flex>
           </Flex>
+          <Field.Hint />
           <Suspense fallback={<Loader>Loading</Loader>}>
-            <CodeEditorLib
+            <Editor
               defaultValue={defaultValue}
               height={fullScreen ? '80vh' : '30vh'}
               language={language}
@@ -180,11 +175,10 @@ const CodeEditor = ({
               value={editorValue}
             />
           </Suspense>
-          <FieldHint />
-          <FieldError />
-        </Stack>
+          <Field.Error />
+        </Flex>
       </StyledDiv>
-    </Field>
+    </Field.Root>
   )
 }
 
