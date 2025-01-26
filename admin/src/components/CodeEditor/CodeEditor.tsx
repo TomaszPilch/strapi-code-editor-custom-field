@@ -65,8 +65,6 @@ type CodeEditorPropsT = {
   value: null | string
 }
 
-initWorkers()
-
 const CodeEditor = ({
   attribute,
   hint,
