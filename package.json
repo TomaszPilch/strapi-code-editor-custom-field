@@ -1,6 +1,6 @@
 {
   "name": "strapi-code-editor-custom-field",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Code editor plugin for strapi CMS. It uses the monaco editor (vscode).",
   "strapi": {
     "name": "strapi-code-editor-custom-field",
@@ -80,7 +80,7 @@
     "url": "https://github.com/TomaszPilch/strapi-code-editor-custom-field.git"
   },
   "engines": {
-    "node": ">=14.19.1 <=18.x.x",
+    "node": ">=18.0.0 <=20.x.x",
     "npm": ">=6.0.0"
   },
   "scripts": {
